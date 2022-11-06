@@ -43,15 +43,12 @@ void tc4() {
     ConcatStringTree s3("his_is");
     ConcatStringTree s4("_an");
     ConcatStringTree s5 = s1.concat(s2).concat(s3.concat(s4));
-    ConcatStringTree s6 = s5.reverse();
 
     cout << s5.toStringPreOrder() << endl;
     cout << s5.toString() << endl;
-    cout <<"S6: "<< s6.toString() << endl;
-    cout << s6.toStringPreOrder() << endl;
     cout << "char at index 8: " << s5.get(8) << endl;
     cout << "first appearance of k: " << s5.indexOf('a') << endl;
-    cout << s5.subString(1, 4).toString() << endl;
+    cout << s5.subString(1, 4).reverse().toString() << endl;
     cout << endl;
 }
 int main() {

@@ -35,7 +35,7 @@ int ConcatStringTree::search_dfs(Node* cur, int& index, char c) {
 
 	if (!cur->left && !cur->right)
 	{
-		int pos = cur->data.find(c);
+		int pos = (int)cur->data.find(c);
 		if (pos != string::npos) 
 		{
 			index += pos;
@@ -43,7 +43,7 @@ int ConcatStringTree::search_dfs(Node* cur, int& index, char c) {
 		}
 		else 
 		{
-			index += cur->data.length();
+			index += (int)cur->data.length();
 			return -1;
 		}
 	}
@@ -161,7 +161,158 @@ ConcatStringTree::Node* ConcatStringTree::deepRe(Node* cur) const{
 	return new_ele;
 }
 ConcatStringTree ConcatStringTree::reverse() const {
-	ConcatStringTree* ans = new ConcatStringTree;
+	ConcatStringTree* ans = new ConcatStringTree();
 	ans->Root = deepRe(Root);
 	return *ans;
+}
+//////////////////////PARENTSTREE IMPLEMENTATION/////////////////////////
+ParentsTree::ParentsTree() {
+	Root = NULL;
+	max_ID = 0;
+	nums_node = 0;
+}
+int ParentsTree::size() const {
+	return this->nums_node;
+}
+int ParentsTree::height(ParNode* cur) {
+	if (!cur) return 0;
+	return cur->height;
+}
+int ParentsTree::getBalance(ParNode* cur) {
+	if (!cur) return 0;
+	return height(cur->left) - height(cur->right);
+}
+ParentsTree::ParNode* ParentsTree::Rtate(ParNode* cur) {
+	ParNode* L = cur->left;
+	ParNode* tmp = L->right;
+
+	//Rotate
+	L->right = cur;
+	cur->left = tmp;
+	//Update heights
+	cur->height = max(height(cur->left), height(cur->right)) + 1;
+	L->height= max(height(L->left), height(L->right)) + 1;
+
+	return L;
+}
+ParentsTree::ParNode* ParentsTree::Ltate(ParNode* cur) {
+	ParNode* R = cur->right;
+	ParNode* tmp = R->left;
+
+	//Rotate
+	R->left = cur;
+	cur->right = tmp;
+	//Update heights
+	cur->height = max(height(cur->left), height(cur->right)) + 1;
+	R->height = max(height(R->left), height(R->right)) + 1;
+
+	return R;
+}
+ParentsTree::ParNode* ParentsTree::MaxNode(ParNode* cur) {
+	ParNode* start = cur;
+	while (start && start->right) start = start->right;
+	return start;
+}
+ParentsTree::ParNode* ParentsTree::insert(ParNode* cur, ParNode* ele) {
+	if (!cur) return ele;
+
+	if (ele->id < cur->id) cur->left = insert(cur->left, ele);
+	else if (ele->id > cur->id) cur->right = insert(cur->right, ele);
+	else return cur;
+
+	//Update height
+	cur->height = max(height(cur->left), height(cur->right)) + 1;
+	int balance = getBalance(cur);
+
+	//LL rotate case
+	if (balance > 1 && cur->id < cur->left->id) return Rtate(cur);
+	//RR rotate case
+	if (balance < -1 && cur->id > cur->right->id) return Ltate(cur);
+	//LR rotate case
+	if (balance > 1 && cur->id > cur->left->id) 
+	{
+		cur->left = Ltate(cur->left);
+		return Rtate(cur);
+	}
+	//RL rotate case
+	if (balance < -1 && cur->id < cur->right->id)
+	{
+		cur->right = Rtate(cur->right);
+		return Ltate(cur);
+	}
+
+	return cur;
+}
+ParentsTree::ParNode* ParentsTree::remove(ParNode* cur, int key) {
+	if (!cur) return cur;
+
+	if (key < cur->id) cur->left = remove(cur->left, key);
+	else if (key > cur->id) cur->right = remove(cur->right, key);
+	else 
+	{
+		if (!cur->left || !cur->right) 
+		{
+			ParNode* tmp = cur->left ? cur->left : cur->right;
+			if (!tmp)
+			{
+				tmp = cur;
+				cur = NULL;
+			}
+			else *cur = *tmp;
+
+			delete(tmp); ////////////// WARNING!!!!!!!!!
+			tmp = NULL;
+		}
+		else 
+		{
+			ParNode* tmp = MaxNode(cur->left);
+			cur->id = tmp->id;
+			cur->left = remove(cur->left, tmp->id);
+		}
+	}
+	if (!cur) return cur;
+	//Update height
+	cur->height= max(height(cur->left), height(cur->right)) + 1;
+
+	//Balance step
+	int balance = getBalance(cur);
+
+	//LL rotate case
+	if (balance > 1 && getBalance(cur->left) >= 0)
+		return Rtate(cur);
+	//LR rotate case
+	if (balance > 1 && getBalance(cur->left) < 0) 
+	{
+		cur->left = Ltate(cur->left);
+		return Rtate(cur);
+	}
+	//RR rotate case
+	if (balance < -1 && getBalance(cur->right) <= 0)
+		return Ltate(cur);
+	//RL rotate case
+	if (balance < -1 && getBalance(cur->right) > 0)
+	{
+		cur->right = Rtate(cur->right);
+		return Ltate(cur);
+	}
+
+	return cur;
+}
+string ParentsTree::Format_ParNode(ParNode* cur) const{
+	if (!cur) return "";
+	string ans = "(id=" + to_string(cur->id) + ")";
+	return ans;
+}
+string ParentsTree::PreOrder(ParNode* cur) const{
+	if (!cur) return "";
+
+	string ans = Format_ParNode(cur);
+	if (cur->left) ans += ";" + PreOrder(cur->left);
+	if (cur->right) ans += ";" + PreOrder(cur->right);
+
+	return ans;
+}
+string ParentsTree::toStringPreOrder() const {
+	string ans = "\"ParentsTree[" + PreOrder(Root) + "]\"";
+	return ans;
 }
