@@ -95,9 +95,9 @@ class ParentsTree {
         string Format_ParNode(ConcatStringTree::ParNode* cur) const;
         string PreOrder(ConcatStringTree::ParNode* cur) const;
 };
-/*
-class ReducedConcatStringTree; // forward declaration
 
+//class ReducedConcatStringTree; // forward declaration
+/*
 class HashConfig {
 private:
     int p;
@@ -108,8 +108,8 @@ private:
 
     friend class ReducedConcatStringTree;
 };
-
-class ReducedConcatStringTree /* */ //{
+*/
+//class ReducedConcatStringTree /* */ {
 /*
 public:
     class LitStringHash {
