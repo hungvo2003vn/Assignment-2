@@ -2,6 +2,7 @@
 #define __CONCAT_STRING_TREE_H__
 
 #include "main.h"
+static int max_id = 0;
 class ParentsTree; //forward declaration
 class ConcatStringTree {
 
@@ -10,19 +11,18 @@ public:
         int id;
         ParNode* left;
         ParNode* right;
-        ConcatStringTree* Parent;
         int height;
 
-        ParNode(int key = 0, ParNode* L = NULL, ParNode* R = NULL, ConcatStringTree* P = NULL, int hi = 0)
+        ParNode(int key = 0, ParNode* L = NULL, ParNode* R = NULL, int hi = 0)
         {
             id = key;
             left = L;
             right = R;
-            Parent = P;
             height = hi;
         }
     };
     struct Node {
+        int id;
         int leftLength;
         int length;
         string data;
@@ -37,6 +37,12 @@ public:
             data = s;
             left = L;
             right = R;
+
+            max_id++;
+            id = max_id;
+
+            if (max_id > 1e7)
+                throw overflow_error("Id is overflow!");
         }
     };
     Node* Root;
@@ -77,7 +83,6 @@ class ParentsTree {
     public:
         friend class ConcatSringTree;
         ConcatStringTree::ParNode* Root;
-        int max_ID;
         int nums_node;
     public:
         ParentsTree();

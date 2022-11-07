@@ -4,14 +4,14 @@ ConcatStringTree::ConcatStringTree() {
 	Root = NULL;
 }
 ConcatStringTree::ConcatStringTree(const char* s) {
-
+	
 	string tmp = string(s);
 	Root = new Node(0,(int)tmp.length(), tmp, NULL, NULL);
 
-	//Create ParentsTree of a Node
+	//Update Parent for Node
 	Root->Par = new ParentsTree();
-	ParNode* ele = new ParNode(1, NULL, NULL, this, 0);
-	Root->Par->Root = Root->Par->insert(Root->Par->Root, ele);
+	Root->Par->Root = new ParNode(max_id, NULL, NULL, 0);
+	Root->Par->nums_node++;
 }
 //Get length
 int ConcatStringTree::length() const {
@@ -105,10 +105,11 @@ string ConcatStringTree::toString() const {
 ConcatStringTree ConcatStringTree::concat(const ConcatStringTree& otherS) const {
 
 	ConcatStringTree* ans = new ConcatStringTree();
-	ans->Root = new Node(Root->length, Root->length + otherS.Root->length, "", Root, otherS.Root );
-	ans->Root->Par = new ParentsTree();
+	ans->Root = new Node(Root->length, Root->length + otherS.Root->length, "", Root, otherS.Root);
 	
-	ParNode* new_ele= new ParNode(ans->Root->Par->max_ID+1, NULL, NULL, ans, 0);
+	//Update Parent for Node
+	ans->Root->Par = new ParentsTree();
+	ParNode* new_ele= new ParNode(max_id, NULL, NULL, 0);
 	Parents_add(ans->Root, new_ele);
 
 	return *ans;
@@ -168,6 +169,7 @@ ConcatStringTree::Node* ConcatStringTree::deepRe(Node* cur) const{
 
 	new_ele->left = deepRe(cur->right);
 	new_ele->right = deepRe(cur->left);
+
 	return new_ele;
 }
 ConcatStringTree ConcatStringTree::reverse() const {
@@ -178,7 +180,6 @@ ConcatStringTree ConcatStringTree::reverse() const {
 //////////////////////PARENTSTREE IMPLEMENTATION/////////////////////////
 ParentsTree::ParentsTree() {
 	Root = NULL;
-	max_ID = 0;
 	nums_node = 0;
 }
 int ParentsTree::size() const {
@@ -226,9 +227,6 @@ ConcatStringTree::ParNode* ParentsTree::MaxNode(ConcatStringTree::ParNode* cur) 
 ConcatStringTree::ParNode* ParentsTree::insert(ConcatStringTree::ParNode* cur, ConcatStringTree::ParNode* ele) {
 	if (!cur) 
 	{
-		max_ID ++;
-		ele->id = max_ID;
-
 		nums_node++;
 		return ele;
 	}
@@ -339,11 +337,8 @@ void ConcatStringTree::Parents_add(Node* cur, ParNode* ele) const{
 
 	cur->Par->insert(cur->Par->Root, ele);
 
-	ParNode* Lele = new ParNode(1,NULL,NULL,ele->Parent,0);
-	ParNode* Rele = new ParNode(1, NULL, NULL, ele->Parent, 0);
-
-	if (cur->left) Lele->id = cur->left->Par->max_ID + 1;
-	if (cur->right) Rele->id = cur->right->Par->max_ID + 1;
+	ParNode* Lele = new ParNode(max_id,NULL,NULL,0);
+	ParNode* Rele = new ParNode(max_id, NULL, NULL, 0);
 
 	Parents_add(cur->left, Lele);
 	Parents_add(cur->right, Rele);
