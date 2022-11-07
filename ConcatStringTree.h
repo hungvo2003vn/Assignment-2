@@ -30,8 +30,9 @@ public:
         Node* right;
         ParentsTree* Par;
 
-        Node(int LLen=0, int len=0, string s="", Node* L = NULL, Node* R = NULL) 
+        Node(int LLen = 0, int len = 0, string s = "", Node* L = NULL, Node* R = NULL)
         {
+
             leftLength = LLen;
             length = len;
             data = s;
@@ -49,23 +50,23 @@ public:
 
 public:
     ConcatStringTree();
-    ConcatStringTree(const char * s);
+    ConcatStringTree(const char* s);
     int length() const;
-    char get(int index);
-    int indexOf(char c);
+    char get(int index) const;
+    int indexOf(char c) const;
     string toStringPreOrder() const;
     string toString() const;
-    ConcatStringTree concat(const ConcatStringTree & otherS) const;
+    ConcatStringTree concat(const ConcatStringTree& otherS) const;
     ConcatStringTree subString(int from, int to) const;
     ConcatStringTree reverse() const;
 
-    int getParTreeSize(const string & query) const;
-    string getParTreeStringPreOrder(const string & query) const;
+    int getParTreeSize(const string& query) const;
+    string getParTreeStringPreOrder(const string& query) const;
 
     //Helper Function
     //
-    Node* search_index(Node* cur, int& index);
-    int search_dfs(Node* cur, int& index, char c);
+    char search_index(Node* cur, int index) const;
+    int search_dfs(Node* cur, int index, char c) const;
     //
     string pre_order(Node* cur) const;
     string toStringNode(Node* cur) const;
@@ -80,25 +81,25 @@ public:
     void Parents_add(Node* cur, ParNode* ele) const;
 };
 class ParentsTree {
-    public:
-        friend class ConcatSringTree;
-        ConcatStringTree::ParNode* Root;
-        int nums_node;
-    public:
-        ParentsTree();
-        int height(ConcatStringTree::ParNode* cur);
-        int getBalance(ConcatStringTree::ParNode* cur);
-        ConcatStringTree::ParNode* Rtate(ConcatStringTree::ParNode* cur);
-        ConcatStringTree::ParNode* Ltate(ConcatStringTree::ParNode* cur);
-        ConcatStringTree::ParNode* MaxNode(ConcatStringTree::ParNode* cur);
-        ConcatStringTree::ParNode* insert(ConcatStringTree::ParNode* node, ConcatStringTree::ParNode* ele);
-        ConcatStringTree::ParNode* remove(ConcatStringTree::ParNode* cur, int key);
+public:
+    friend class ConcatSringTree;
+    ConcatStringTree::ParNode* Root;
+    int nums_node;
+public:
+    ParentsTree();
+    int height(ConcatStringTree::ParNode* cur);
+    int getBalance(ConcatStringTree::ParNode* cur);
+    ConcatStringTree::ParNode* Rtate(ConcatStringTree::ParNode* cur);
+    ConcatStringTree::ParNode* Ltate(ConcatStringTree::ParNode* cur);
+    ConcatStringTree::ParNode* MaxNode(ConcatStringTree::ParNode* cur);
+    ConcatStringTree::ParNode* insert(ConcatStringTree::ParNode* node, ConcatStringTree::ParNode* ele);
+    ConcatStringTree::ParNode* remove(ConcatStringTree::ParNode* cur, int key);
 
-        int size() const;
-        string toStringPreOrder() const;
-        //Helper
-        string Format_ParNode(ConcatStringTree::ParNode* cur) const;
-        string PreOrder(ConcatStringTree::ParNode* cur) const;
+    int size() const;
+    string toStringPreOrder() const;
+    //Helper
+    string Format_ParNode(ConcatStringTree::ParNode* cur) const;
+    string PreOrder(ConcatStringTree::ParNode* cur) const;
 };
 
 //class ReducedConcatStringTree; // forward declaration
@@ -110,7 +111,6 @@ private:
     double lambda;
     double alpha;
     int initSize;
-
     friend class ReducedConcatStringTree;
 };
 */
@@ -123,7 +123,6 @@ public:
         int getLastInsertedIndex() const;
         string toString() const;
     };
-
 public:
     static LitStringHash litStringHash;
 };*/

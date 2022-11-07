@@ -61,10 +61,10 @@ void tc4() {
 }
 int main() {
     
-    //tc1();
-    //tc2();
+    tc1();
+    tc2();
     tc3();
-    //tc4();
+    tc4();
     system("pause");
     return 0;
 }
