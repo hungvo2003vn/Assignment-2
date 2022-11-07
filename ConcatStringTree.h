@@ -2,10 +2,26 @@
 #define __CONCAT_STRING_TREE_H__
 
 #include "main.h"
-class ParentsTree; // forward declaration
+class ParentsTree; //forward declaration
 class ConcatStringTree {
 
 public:
+    struct ParNode {
+        int id;
+        ParNode* left;
+        ParNode* right;
+        ConcatStringTree* Parent;
+        int height;
+
+        ParNode(int key = 0, ParNode* L = NULL, ParNode* R = NULL, ConcatStringTree* P = NULL, int hi = 0)
+        {
+            id = key;
+            left = L;
+            right = R;
+            Parent = P;
+            height = hi;
+        }
+    };
     struct Node {
         int leftLength;
         int length;
@@ -54,43 +70,30 @@ public:
     Node* build_bottom(Node* root, int start, int from, int to) const;
     //
     Node* deepRe(Node* cur) const;
+    //
+    void Parents_add(Node* cur, ParNode* ele) const;
 };
 class ParentsTree {
     public:
-        struct ParNode {
-            int id;
-            ParNode* left;
-            ParNode* right;
-            ConcatStringTree::Node* Parent;
-            int height;
-
-            ParNode(int key=0, ParNode* L=NULL, ParNode* R=NULL, ConcatStringTree::Node* P=NULL, int hi=0)
-            {
-                id = key;
-                left = L;
-                right = R;
-                Parent = P;
-                height = hi;
-            }
-        };
-        ParNode* Root;
+        friend class ConcatSringTree;
+        ConcatStringTree::ParNode* Root;
         int max_ID;
         int nums_node;
     public:
         ParentsTree();
-        int height(ParNode* cur);
-        int getBalance(ParNode* cur);
-        ParNode* Rtate(ParNode* cur);
-        ParNode* Ltate(ParNode* cur);
-        ParNode* MaxNode(ParNode* cur);
-        ParNode* insert(ParNode* node, ParNode* ele);
-        ParNode* remove(ParNode* cur, int key);
+        int height(ConcatStringTree::ParNode* cur);
+        int getBalance(ConcatStringTree::ParNode* cur);
+        ConcatStringTree::ParNode* Rtate(ConcatStringTree::ParNode* cur);
+        ConcatStringTree::ParNode* Ltate(ConcatStringTree::ParNode* cur);
+        ConcatStringTree::ParNode* MaxNode(ConcatStringTree::ParNode* cur);
+        ConcatStringTree::ParNode* insert(ConcatStringTree::ParNode* node, ConcatStringTree::ParNode* ele);
+        ConcatStringTree::ParNode* remove(ConcatStringTree::ParNode* cur, int key);
 
         int size() const;
         string toStringPreOrder() const;
         //Helper
-        string Format_ParNode(ParNode* cur) const;
-        string PreOrder(ParNode* cur) const;
+        string Format_ParNode(ConcatStringTree::ParNode* cur) const;
+        string PreOrder(ConcatStringTree::ParNode* cur) const;
 };
 /*
 class ReducedConcatStringTree; // forward declaration

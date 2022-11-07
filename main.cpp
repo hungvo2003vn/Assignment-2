@@ -1,6 +1,7 @@
 #include "ConcatStringTree.h"
 void tc1() {
     cout << "//////////////TEST CASE 1////////////////\n";
+    cout << "\n";
     ConcatStringTree s1("acbbcab");
     cout << s1.length() << endl;
     cout << s1.get(1) <<"."<< endl;
@@ -15,6 +16,7 @@ void tc1() {
 }
 void tc2() {
     cout << "//////////////TEST CASE 2////////////////\n";
+    cout << "\n";
     ConcatStringTree s1("Hello");
     ConcatStringTree s2(",_t");
     ConcatStringTree s3 = s1.concat(s2);
@@ -23,21 +25,23 @@ void tc2() {
     cout << s3.subString(5, 6).toString()<< endl;
     cout << s3.reverse().toString() << "." <<endl;
     cout << endl;
-}/*
+}
 void tc3() {
-cout << "//////////////TEST CASE 3////////////////\n";
+    cout << "//////////////TEST CASE 3////////////////\n";
+    cout << "\n";
     ConcatStringTree* s1 = new ConcatStringTree("a");
     ConcatStringTree* s2 = new ConcatStringTree("b");
     ConcatStringTree* s3 = new ConcatStringTree(s1->concat(*s2));
     cout << s3->getParTreeSize("l") <<endl;
     cout << s3 -> getParTreeStringPreOrder("l") << endl;
-    delete s1;
-    delete s2;
-    delete s3;
+    //delete s1;
+    //delete s2;
+    //delete s3;
     cout<<endl;
-}*/
+}
 void tc4() {
     cout << "//////////////TEST CASE 4////////////////\n";
+    cout << "\n";
     ConcatStringTree s1("Hello");
     ConcatStringTree s2(",_t");
     ConcatStringTree s3("his_is");
@@ -55,6 +59,7 @@ int main() {
     
     tc1();
     tc2();
+    tc3();
     tc4();
     system("pause");
     return 0;
