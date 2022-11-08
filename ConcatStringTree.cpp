@@ -175,14 +175,21 @@ ConcatStringTree ConcatStringTree::subString(int from, int to) const {
 //Reverse
 ConcatStringTree::Node* ConcatStringTree::deepRe(Node* cur) const {
 	if (!cur) return NULL;
+	
+	if (!cur->left && !cur->right) //Attemp Leaf Node
+	{
+		string s = string(cur->data.rbegin(), cur->data.rend());
+		Node* new_ele = new Node(cur->length - cur->leftLength, cur->length, s, NULL, NULL);
 
-	string s = string(cur->data.rbegin(), cur->data.rend());
-	Node* new_ele = new Node(cur->length - cur->leftLength, cur->length, s, NULL, NULL);
+		//Update Parent for the node
+		new_ele->Par = new ParentsTree();
+		new_ele->Par->Paroot = new ParNode(max_id, NULL, NULL, 0);
+		new_ele->Par->nums_node++;
 
-	new_ele->left = deepRe(cur->right);
-	new_ele->right = deepRe(cur->left);
+		return new_ele;
+	}
 
-	return new_ele;
+	return combine(deepRe(cur->right), deepRe(cur->left));
 }
 ConcatStringTree ConcatStringTree::reverse() const {
 	ConcatStringTree* ans = new ConcatStringTree();
@@ -352,7 +359,7 @@ void ConcatStringTree::Parents_add(Node* cur, ParNode* ele) const {
 	if(cur->left)
 		Parents_add(cur->left, new ParNode(max_id, NULL, NULL, 0));
 	if(cur->right)
-	Parents_add(cur->right, new ParNode(max_id, NULL, NULL, 0));
+		Parents_add(cur->right, new ParNode(max_id, NULL, NULL, 0));
 
 	return;
 }

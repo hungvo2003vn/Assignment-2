@@ -35,9 +35,9 @@ void tc3() {
     cout << s3->getParTreeSize("l") <<endl;
     cout << s3 -> getParTreeStringPreOrder("l") << endl;
 
-    ConcatStringTree* s4 = new ConcatStringTree(s3->subString(0,s3->length()));
-    cout << s4->getParTreeSize("") << endl;
-    cout << s4->getParTreeStringPreOrder("") << endl;
+    ConcatStringTree* s4 = new ConcatStringTree(s3->reverse());
+    cout << s4->getParTreeSize("l") << endl;
+    cout << s4->getParTreeStringPreOrder("l") << endl;
 
     //delete s1;
     //delete s2;
@@ -58,14 +58,16 @@ void tc4() {
     cout << "char at index 8: " << s5.get(8) << endl;
     cout << "first appearance of k: " << s5.indexOf('a') << endl;
     cout << s5.subString(1, 4).reverse().toString() << endl;
+
+    cout << s5.getParTreeStringPreOrder("ll") << endl;
     cout << endl;
 }
 int main() {
     
-    //tc1();
-    //tc2();
+    tc1();
+    tc2();
     tc3();
-    //tc4();
+    tc4();
     system("pause");
     return 0;
 }
