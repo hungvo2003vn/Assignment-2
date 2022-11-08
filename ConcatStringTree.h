@@ -2,7 +2,8 @@
 #define __CONCAT_STRING_TREE_H__
 
 #include "main.h"
-static int max_id = 0;
+
+static int max_id=0;
 class ParentsTree; //forward declaration
 class ConcatStringTree {
 
@@ -83,7 +84,7 @@ public:
 class ParentsTree {
 public:
     friend class ConcatSringTree;
-    ConcatStringTree::ParNode* Root;
+    ConcatStringTree::ParNode* Paroot;
     int nums_node;
 public:
     ParentsTree();

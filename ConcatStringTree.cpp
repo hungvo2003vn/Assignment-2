@@ -10,7 +10,7 @@ ConcatStringTree::ConcatStringTree(const char* s) {
 
 	//Update Parent for Node
 	Root->Par = new ParentsTree();
-	Root->Par->Root = new ParNode(max_id, NULL, NULL, 0);
+	Root->Par->Paroot = new ParNode(max_id, NULL, NULL, 0);
 	Root->Par->nums_node++;
 }
 //Get length
@@ -125,6 +125,11 @@ ConcatStringTree::Node* ConcatStringTree::combine(Node* L, Node* R) const {
 	root->length = root->leftLength;
 	if (R) root->length += R->length;
 
+	//Add Parent to all node in the subtree "root"
+	root->Par = new ParentsTree();
+	ParNode* new_Parent = new ParNode(max_id, NULL, NULL, 0);
+	Parents_add(root, new_Parent);
+
 	return root;
 }
 ConcatStringTree::Node* ConcatStringTree::build_bottom(Node* cur, int start, int from, int to) const {
@@ -133,22 +138,29 @@ ConcatStringTree::Node* ConcatStringTree::build_bottom(Node* cur, int start, int
 	if (!cur->left && !cur->right)
 	{
 		if (start >= to || start + cur->length - 1 < from) return NULL;
-		if (start <= from && from < start + cur->length)
-		{
-			Node* tmp = new Node(0, 0, cur->data.substr(from - start, min(cur->length + start - from, to - from)), NULL, NULL);
-			return tmp;
-		}
-		else if (start < to && to <= start + cur->length)
-		{
-			Node* tmp = new Node(0, 0, cur->data.substr(0, to - start), NULL, NULL);
-			return tmp;
-		}
-		else {
-			Node* tmp = new Node(0, 0, cur->data, NULL, NULL);
-			return tmp;
-		}
+
+		Node* tmp = NULL;
+
+		if (start <= from && from < start + cur->length) //Current Node contain position from
+			tmp = new Node(0, 0, cur->data.substr(from - start, min(cur->length + start - from, to - from)), NULL, NULL);
+		
+		else if (start < to && to <= start + cur->length) //Current Node contain position to-1
+			tmp = new Node(0, 0, cur->data.substr(0, to - start), NULL, NULL);
+		
+		else //Current Node does not contain position from and to-1
+			tmp = new Node(0, 0, cur->data, NULL, NULL);
+
+		//Add parent for the node
+		tmp->length = (int)tmp->data.length();
+
+		tmp->Par = new ParentsTree();
+		tmp->Par->Paroot = new ParNode(max_id, NULL, NULL, 0);
+		tmp->Par->nums_node++;
+
+		return tmp;
 	}
-	else return combine(build_bottom(cur->left, start, from, to), build_bottom(cur->right, start + cur->leftLength, from, to));
+	else return combine(build_bottom(cur->left, start, from, to), 
+		                build_bottom(cur->right, start + cur->leftLength, from, to));
 }
 ConcatStringTree ConcatStringTree::subString(int from, int to) const {
 	if (from<0 || to>Root->length)
@@ -179,7 +191,7 @@ ConcatStringTree ConcatStringTree::reverse() const {
 }
 //////////////////////PARENTSTREE IMPLEMENTATION/////////////////////////
 ParentsTree::ParentsTree() {
-	Root = NULL;
+	Paroot = NULL;
 	nums_node = 0;
 }
 int ParentsTree::size() const {
@@ -328,20 +340,19 @@ string ParentsTree::PreOrder(ConcatStringTree::ParNode* cur) const {
 	return ans;
 }
 string ParentsTree::toStringPreOrder() const {
-	string ans = "\"ParentsTree[" + PreOrder(Root) + "]\"";
+	string ans = "\"ParentsTree[" + PreOrder(Paroot) + "]\"";
 	return ans;
 }
 //Traverse Sub tree and add Parents 
 void ConcatStringTree::Parents_add(Node* cur, ParNode* ele) const {
 	if (!ele || !cur) return;
 
-	cur->Par->insert(cur->Par->Root, ele);
+	cur->Par->Paroot = cur->Par->insert(cur->Par->Paroot, ele);
 
-	ParNode* Lele = new ParNode(max_id, NULL, NULL, 0);
-	ParNode* Rele = new ParNode(max_id, NULL, NULL, 0);
-
-	Parents_add(cur->left, Lele);
-	Parents_add(cur->right, Rele);
+	if(cur->left)
+		Parents_add(cur->left, new ParNode(max_id, NULL, NULL, 0));
+	if(cur->right)
+	Parents_add(cur->right, new ParNode(max_id, NULL, NULL, 0));
 
 	return;
 }
@@ -357,11 +368,15 @@ int ConcatStringTree::getParTreeSize(const string& query) const {
 		else
 			throw runtime_error("Invalid character of query");
 	}
+	if (!tmp)
+		throw runtime_error("Invalid query: reaching NULL");
+
 	return tmp->Par->size();
 }
 //get Partree preorder
 string ConcatStringTree::getParTreeStringPreOrder(const string& query) const {
 	Node* tmp = Root;
+	
 	for (char c : query) {
 		if (!tmp)
 			throw runtime_error("Invalid query: reaching NULL");

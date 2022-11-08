@@ -30,14 +30,15 @@ void tc3() {
     cout << "//////////////TEST CASE 3////////////////\n";
     cout << "\n";
     ConcatStringTree* s1 = new ConcatStringTree("a");
-    ConcatStringTree* s2 = new ConcatStringTree("b");
+    ConcatStringTree* s2 = new ConcatStringTree("bc");
     ConcatStringTree* s3 = new ConcatStringTree(s1->concat(*s2));
     cout << s3->getParTreeSize("l") <<endl;
     cout << s3 -> getParTreeStringPreOrder("l") << endl;
 
-    //ConcatStringTree* s4 = new ConcatStringTree(s3->reverse());
-    //cout << s4->getParTreeSize("l") << endl;
-    //cout << s4->getParTreeStringPreOrder("l") << endl;
+    ConcatStringTree* s4 = new ConcatStringTree(s3->subString(0,s3->length()));
+    cout << s4->getParTreeSize("") << endl;
+    cout << s4->getParTreeStringPreOrder("") << endl;
+
     //delete s1;
     //delete s2;
     //delete s3;
@@ -61,10 +62,10 @@ void tc4() {
 }
 int main() {
     
-    tc1();
-    tc2();
+    //tc1();
+    //tc2();
     tc3();
-    tc4();
+    //tc4();
     system("pause");
     return 0;
 }
